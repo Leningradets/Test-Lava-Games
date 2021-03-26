@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class RagdollBone : MonoBehaviour
 {
     private Rigidbody _rigidbody;
+
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
 
     public void Activate()
     {
         _rigidbody.isKinematic = false;
     }
 
-    public void Bounce(float force, Vector3 position, float radius)
+    public void Bounce(Vector3 force)
     {
-        _rigidbody.AddExplosionForce(force, position, radius);
+        _rigidbody.AddForce(force);
     }
 }

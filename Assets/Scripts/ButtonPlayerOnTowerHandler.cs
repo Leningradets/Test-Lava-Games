@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerOnTowerHandler : MonoBehaviour
+public class ButtonPlayerOnTowerHandler : MonoBehaviour
 {
     [SerializeField] private Scaner _playerScaner;
 
@@ -11,19 +11,19 @@ public class PlayerOnTowerHandler : MonoBehaviour
     private void Start()
     {
         gameObject.SetActive(false);
-        _playerScaner.PlayerOn += OnPlayerOn;
+        _playerScaner.PlayerOn += OnPlayerOnTower;
     }
 
     private void OnDestroy()
     {
-        _playerScaner.PlayerOn -= OnPlayerOn;
+        _playerScaner.PlayerOn -= OnPlayerOnTower;
     }
 
-    public void OnPlayerOn(PlayerMover playerMover)
+    public void OnPlayerOnTower(PlayerMover playerMover)
     {
         _playerMover = playerMover;
         gameObject.SetActive(true);
-        _playerScaner.PlayerOn -= OnPlayerOn;
+        _playerScaner.PlayerOn -= OnPlayerOnTower;
     }
 
     public void RemovePlayerFromTower()
@@ -33,6 +33,6 @@ public class PlayerOnTowerHandler : MonoBehaviour
             _playerMover.SetOnTower(false);
         }
         gameObject.SetActive(false);
-        _playerScaner.PlayerOn += OnPlayerOn;
+        _playerScaner.PlayerOn += OnPlayerOnTower;
     }
 }

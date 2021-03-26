@@ -8,6 +8,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float _timeBetweenShoot;
     [SerializeField] private Bullet _bullet;
     [SerializeField] private Transform _bulletSpawnPoint;
+    private float _bulletForce;
+
     private PlayerMover _playerMover;
     private PlayerInput _playerInput;
     private Animator _animator;
@@ -15,6 +17,16 @@ public class Weapon : MonoBehaviour
     private bool _clicked;
 
     private float _timeAfterLastShoot;
+
+    public void SetTimeBetweenShoot(float timeBetweenShoot)
+    {
+        _timeBetweenShoot = timeBetweenShoot;
+    }
+
+    public void SetBulletForce(float bulletForce)
+    {
+        _bulletForce = bulletForce;
+    }
 
     private void Awake()
     {
@@ -57,6 +69,7 @@ public class Weapon : MonoBehaviour
 
         var bullet = Instantiate(_bullet, _bulletSpawnPoint.position, Quaternion.identity);
         bullet.transform.LookAt(_playerInput.GetClickPoint());
+        bullet.SetForce(_bulletForce);
 
         _timeAfterLastShoot = 0;
     }

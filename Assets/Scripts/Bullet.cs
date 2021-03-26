@@ -4,24 +4,41 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField]private float speed;
+    [SerializeField] private float _speed;
+    [SerializeField] private ParticleSystem _bloodBurst;
+    [SerializeField] private ParticleSystem _burst;
 
-    public float Speed { get => speed; set => speed = value; }
+    private float _force;
+
+    private Transform _transform;
+
+    public void SetForce(float force)
+    {
+        _force = force;
+    }
+
+    private void Start()
+    {
+        _transform = transform;
+    }
 
     private void Update()
     {
-        transform.Translate(Vector3.forward * speed);
+        _transform.Translate(Vector3.forward * _speed * Time.deltaTime);
 
-        Debug.DrawRay(transform.position, transform.forward);
+        Debug.DrawRay(_transform.position, _transform.forward * _speed * Time.deltaTime * 2);
 
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
+        if (Physics.Raycast(_transform.position, _transform.forward, out RaycastHit hit, _speed * Time.deltaTime * 2))
         {
             if (hit.transform.gameObject.TryGetComponent(out RagdollBone ragdollBone))
             {
                 ragdollBone.GetComponentInParent<RagdollActivator>().ActivateRagdoll();
-                ragdollBone.Bounce(100, hit.point, 0);
+                Debug.Log(_force);
+                ragdollBone.Bounce(transform.forward * _force);
+                Instantiate(_bloodBurst, hit.point, Quaternion.identity);
             }
 
+            Instantiate(_burst, hit.point, Quaternion.identity);
             Destroy(gameObject);
         }
     }
